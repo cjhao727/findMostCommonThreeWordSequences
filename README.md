@@ -63,4 +63,3 @@ This is kind of similar to one of the projects I did before. I need to read lots
 - In order to test my app easily, now all test data are saved in resources directory. I am thinking about make this app to be able to handle more generic relative path.
 
 #### How to run my app
-
