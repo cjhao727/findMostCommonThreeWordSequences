@@ -43,8 +43,19 @@ This is kind of similar to one of the projects I did before. I need to read lots
 
 - Updates:
 
-    - Inorder to handle large file, replace HashMap by concurrentHashMap;
+    - Inorder to handle large file, replace HashMap by concurrentHashMap; Implement LongAdder to count the occurrences of certain three word sequences.
     - Since PriorityQueue poll method's time complexity is as same as stream sorted. Will just implement stream.
+    - Instead of regular stream, I am using parallel stream to handle large file.
     
 - Passed all 3 tests
 - Will refactor the code to implement best code practice.
+
+#### Improvement:
+
+- Add more error handling.
+- Think of simple grammar check to filer out pointless three word sequences.
+- Due to the time limitation, did not follow TDD here.
+- Add unit tests. e.g. Test if it is able to get correct arguments.
+- In order to test my app easily, now all test data are saved in resources directory. I am thinking about make this app to be able to handle more generic relative path.
+
+#### How to run my app

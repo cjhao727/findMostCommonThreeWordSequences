@@ -1,5 +1,6 @@
 package com.j.service;
 
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -7,61 +8,88 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Scanner;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.LongAdder;
 import java.util.stream.Collectors;
 
 import static java.lang.Integer.compare;
-import static java.lang.Integer.parseInt;
 
 public class FileService {
 
-    public void getMostCommonThreeWordSequences(String arg) {
-        try {
-            long start = Instant.now().toEpochMilli();
+    private String[] args;
 
-            ConcurrentHashMap<String, LongAdder> wordMap = new ConcurrentHashMap<>();
+    private static final String regexOfPunctuationAndSpace = "[\\p{Punct}\\s]+";
+    private static final String regexOfSingleWord = "\\w+";
+    private static final int sizeOfListOfMostCommonThreeWordSequences = 100;
+
+    public void setArgs(String[] args) {
+        this.args = args;
+    }
+
+    public void setArgs() {
+        System.out.print("Enter Parameter : ");
+        Scanner scanner = new Scanner(System.in);
+        String t = scanner.nextLine().trim();
+
+        this.args = t.split("\\s+");
+    }
+
+    public void showFirstHundredMostCommonThreeWordSequences() {
+        Arrays.stream(args).forEach(this::buildFirstHundredMostCommonThreeWordSequences);
+    }
+
+    private void buildFirstHundredMostCommonThreeWordSequences(String arg) {
+        try {
+            long timeOfStart = Instant.now().toEpochMilli();
+
             Path path = Paths.get(getClass().getClassLoader().getResource(arg).toURI());
 
-            List<String> tokenList = Files.readAllLines(path)
-                    .parallelStream()
-                    .map(line -> line.split("[\\p{Punct}\\s]+"))
-                    .flatMap(Arrays::stream)
-                    .parallel()
-                    .filter(word -> word.matches("\\w+"))
-                    .map(String::toLowerCase)
-                    .collect(Collectors.toList());
+            List<String> tokenList = getSingleWordTokenList(path);
+            List<String> threeWordSequence = createThreeWordSequences(tokenList);
+            ConcurrentHashMap<String, LongAdder> threeWordSequencesMap = getThreeWordSequencesMap(threeWordSequence);
 
-//            System.out.println(tokenList);
-            List<String> threeWordSequence = new ArrayList<>();
+            threeWordSequencesMap.keySet().stream()
+                    .sorted((previousSequence, nextSequence) -> compare(threeWordSequencesMap.get(nextSequence).intValue(), threeWordSequencesMap.get(previousSequence).intValue()))
+                    .map(key -> String.format("%d%s", threeWordSequencesMap.get(key).intValue(), " - " + key))
+                    .limit(sizeOfListOfMostCommonThreeWordSequences)
+                    .forEach(threeWordSequences -> System.out.println("\t" + threeWordSequences));
 
-            for (int i = 0; i < tokenList.size() - 3; i++) {
-                threeWordSequence.add(tokenList.get(i) + " " + tokenList.get(i+1) + " " + tokenList.get(i+2));
-            }
-
-//            System.out.println(threeWordSequence);
-
-            threeWordSequence.parallelStream().forEach(token -> {
-                if(!wordMap.containsKey(token)){
-                    wordMap.put(token, new LongAdder());
-                }
-                wordMap.get(token).increment();
-            });
-
-            wordMap.keySet().stream()
-                    .sorted((p, n) -> compare(wordMap.get(n).intValue(), wordMap.get(p).intValue()))
-                    .map(key -> String.format("%d%s", wordMap.get(key).intValue(), " - " + key))
-                    .limit(100)
-                    .forEach(w -> System.out.println("\t" + w));
-//
-//            System.out.println(wordMap);
-            long end = Instant.now().toEpochMilli();
-            System.out.println(String.format("\tCompleted in %d milliseconds", (end - start)));
-
+            long timeOfEnd = Instant.now().toEpochMilli();
+            System.out.println(String.format("\nCompleted in %d milliseconds", (timeOfEnd - timeOfStart)));
 
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
+    private ConcurrentHashMap<String, LongAdder> getThreeWordSequencesMap(List<String> threeWordSequence) {
+        ConcurrentHashMap<String, LongAdder> threeWordSequenceMap = new ConcurrentHashMap<>();
+        threeWordSequence.parallelStream().forEach(token -> {
+            if (!threeWordSequenceMap.containsKey(token)) {
+                threeWordSequenceMap.put(token, new LongAdder());
+            }
+            threeWordSequenceMap.get(token).increment();
+        });
+        return threeWordSequenceMap;
+    }
+
+    private List<String> createThreeWordSequences(List<String> tokenList) {
+        List<String> threeWordSequence = new ArrayList<>();
+        for (int i = 0; i < tokenList.size() - 3; i++) {
+            threeWordSequence.add(tokenList.get(i) + " " + tokenList.get(i + 1) + " " + tokenList.get(i + 2));
+        }
+        return threeWordSequence;
+    }
+
+    private List<String> getSingleWordTokenList(Path path) throws IOException {
+        return Files.readAllLines(path)
+                .parallelStream()
+                .map(line -> line.split(regexOfPunctuationAndSpace))
+                .flatMap(Arrays::stream)
+                .parallel()
+                .filter(word -> word.matches(regexOfSingleWord))
+                .map(String::toLowerCase)
+                .collect(Collectors.toList());
+    }
 }
