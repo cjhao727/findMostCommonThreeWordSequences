@@ -1,3 +1,10 @@
 
 .idea/vcs.xml
 .idea/workspace.xml
+target/classes/big1.txt
+target/classes/big2.txt
+target/classes/com/j/Application.class
+target/classes/com/j/service/FileService.class
+target/classes/test.txt
+.idea/workspace.xml
+.idea/uiDesigner.xml
