@@ -47,7 +47,11 @@ This is kind of similar to one of the projects I did before. I need to read lots
     - Since PriorityQueue poll method's time complexity is as same as stream sorted. Will just implement stream.
     - Instead of regular stream, I am using parallel stream to handle large file.
     
-- Passed all 3 tests
+- Passed all 4 tests against 4 different test files.
+   
+   - round 1: 34 milliseconds, 802 milliseconds ("Origin Of Species"), 455 milliseconds, 720 milliseconds.
+   - round 2: 60 milliseconds, 1007 milliseconds ("Origin Of Species"), 623 milliseconds, 1190 milliseconds.
+
 - Will refactor the code to implement best code practice.
 
 #### Improvement:
@@ -59,3 +63,4 @@ This is kind of similar to one of the projects I did before. I need to read lots
 - In order to test my app easily, now all test data are saved in resources directory. I am thinking about make this app to be able to handle more generic relative path.
 
 #### How to run my app
+
