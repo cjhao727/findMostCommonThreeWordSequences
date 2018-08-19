@@ -43,7 +43,8 @@ public class FileService {
         try {
             long timeOfStart = Instant.now().toEpochMilli();
 
-            Path path = Paths.get(getClass().getClassLoader().getResource(arg).toURI());
+            //Path path = Paths.get(getClass().getClassLoader().getResource(arg).toURI()); this is for dev test
+            Path path = Paths.get(arg);
 
             List<String> tokenList = getSingleWordTokenList(path);
             List<String> threeWordSequence = createThreeWordSequences(tokenList);

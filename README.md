@@ -60,6 +60,10 @@ This is kind of similar to one of the projects I did before. I need to read lots
 - Think of simple grammar check to filer out pointless three word sequences.
 - Due to the time limitation, did not follow TDD here.
 - Add unit tests. e.g. Test if it is able to get correct arguments.
-- In order to test my app easily, now all test data are saved in resources directory. I am thinking about make this app to be able to handle more generic relative path.
 
-#### How to run my app
+#### To run the app
+I have upload the jar file of my app.
+e.g.
+```
+java -jar findMostCommonThreeWordSequences-1.0-SNAPSHOT.jar ../src/main/resources/test.txt
+```
