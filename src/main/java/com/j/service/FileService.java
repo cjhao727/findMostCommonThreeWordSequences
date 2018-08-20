@@ -36,17 +36,17 @@ public class FileService {
     }
 
     public void showFirstHundredMostCommonThreeWordSequences() {
-        Arrays.stream(args).forEach(this::buildFirstHundredMostCommonThreeWordSequences);
+        Arrays.stream(args).forEach(this::getFirstHundredMostCommonThreeWordSequences);
     }
 
-    private void buildFirstHundredMostCommonThreeWordSequences(String arg) {
+    private void getFirstHundredMostCommonThreeWordSequences(String arg) {
         try {
             long timeOfStart = Instant.now().toEpochMilli();
 
             //Path path = Paths.get(getClass().getClassLoader().getResource(arg).toURI()); this is for dev test
-            Path path = Paths.get(arg);
+            Path pathOfFile = Paths.get(arg);
 
-            List<String> tokenList = getSingleWordTokenList(path);
+            List<String> tokenList = getSingleWordTokenList(pathOfFile);
             List<String> threeWordSequence = createThreeWordSequences(tokenList);
             ConcurrentHashMap<String, LongAdder> threeWordSequencesMap = getThreeWordSequencesMap(threeWordSequence);
 
@@ -83,8 +83,8 @@ public class FileService {
         return threeWordSequence;
     }
 
-    private List<String> getSingleWordTokenList(Path path) throws IOException {
-        return Files.readAllLines(path)
+    private List<String> getSingleWordTokenList(Path pathOfFile) throws IOException {
+        return Files.readAllLines(pathOfFile)
                 .parallelStream()
                 .map(line -> line.split(regexOfPunctuationAndSpace))
                 .flatMap(Arrays::stream)
