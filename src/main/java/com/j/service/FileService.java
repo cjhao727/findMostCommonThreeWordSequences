@@ -31,15 +31,15 @@ public class FileService {
         System.out.print("Enter Parameter : ");
         Scanner scanner = new Scanner(System.in);
         String t = scanner.nextLine().trim();
-
+        scanner.close();
         this.args = t.split("\\s+");
     }
 
     public void showFirstHundredMostCommonThreeWordSequences() {
-        Arrays.stream(args).forEach(this::getFirstHundredMostCommonThreeWordSequences);
+        Arrays.stream(args).forEach(this::getFirstNmostCommonThreeWordSequences);
     }
 
-    private void getFirstHundredMostCommonThreeWordSequences(String arg) {
+    private void getFirstNmostCommonThreeWordSequences(String arg) {
         try {
             long timeOfStart = Instant.now().toEpochMilli();
 
@@ -48,7 +48,7 @@ public class FileService {
 
             List<String> tokenList = getSingleWordTokenList(pathOfFile);
             List<String> threeWordSequence = createThreeWordSequences(tokenList);
-            ConcurrentHashMap<String, LongAdder> threeWordSequencesMap = getThreeWordSequencesMap(threeWordSequence);
+            ConcurrentHashMap<String, LongAdder> threeWordSequencesMap = buildThreeWordSequencesMap(threeWordSequence);
 
             threeWordSequencesMap.keySet().stream()
                     .sorted((previousSequence, nextSequence) -> compare(threeWordSequencesMap.get(nextSequence).intValue(), threeWordSequencesMap.get(previousSequence).intValue()))
@@ -64,7 +64,7 @@ public class FileService {
         }
     }
 
-    private ConcurrentHashMap<String, LongAdder> getThreeWordSequencesMap(List<String> threeWordSequence) {
+    private ConcurrentHashMap<String, LongAdder> buildThreeWordSequencesMap(List<String> threeWordSequence) {
         ConcurrentHashMap<String, LongAdder> threeWordSequenceMap = new ConcurrentHashMap<>();
         threeWordSequence.parallelStream().forEach(token -> {
             if (!threeWordSequenceMap.containsKey(token)) {
