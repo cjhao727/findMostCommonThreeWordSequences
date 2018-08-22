@@ -21,6 +21,7 @@ public class FileService {
 
     private static final String regexOfPunctuationAndSpace = "[\\p{Punct}\\s]+";
     private static final String regexOfSingleWord = "\\w+";
+    private static final String regexOfWhitespace = "\\s+";
     private static final int sizeOfListOfMostCommonThreeWordSequences = 100;
 
     public void setArgs(String[] args) {
@@ -32,14 +33,14 @@ public class FileService {
         Scanner scanner = new Scanner(System.in);
         String t = scanner.nextLine().trim();
         scanner.close();
-        this.args = t.split("\\s+");
+        this.args = t.split(regexOfWhitespace);
     }
 
     public void showFirstHundredMostCommonThreeWordSequences() {
-        Arrays.stream(args).forEach(this::getFirstNmostCommonThreeWordSequences);
+        Arrays.stream(args).forEach(this::getFirstHundredMostCommonThreeWordSequences);
     }
 
-    private void getFirstNmostCommonThreeWordSequences(String arg) {
+    private void getFirstHundredMostCommonThreeWordSequences(String arg) {
         try {
             long timeOfStart = Instant.now().toEpochMilli();
 

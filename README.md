@@ -62,6 +62,7 @@ This is kind of similar to one of the projects I did before. I need to read lots
 - Add unit tests. e.g. Test if it is able to get correct arguments.
 - giving better name of variable and methods
 - getFirstNmostCommonThreeWordSequences reusable.
+- Due to the time limitation, this app was not very testable. If I have time, I do want to implement some ideas to make it much more testable.
 
 #### To run the app
 I have upload the jar file of my app.
