@@ -63,7 +63,17 @@ This is kind of similar to one of the projects I did before. I need to read lots
 
 #### To run the app
 I have upload the jar file of my app.
-e.g.
+
+To run it with parameter(s)
 ```
 java -jar findMostCommonThreeWordSequences-1.0-SNAPSHOT.jar ../src/main/resources/test.txt
 ```
+To run it with std input
+```
+java -jar findMostCommonThreeWordSequences-1.0-SNAPSHOT.jar
+Enter Parameter : big1.txt
+```
+
+Note:
+I have created a branch for some thoughts of improvement.
+Please take a look if you get time. Thank you.
