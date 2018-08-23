@@ -71,7 +71,7 @@ java -jar findMostCommonThreeWordSequences-1.0-SNAPSHOT.jar ../src/main/resource
 To run it with std input
 ```
 java -jar findMostCommonThreeWordSequences-1.0-SNAPSHOT.jar
-Enter Parameter : big1.txt
+Enter Parameter : ../src/main/resources/test.txt
 ```
 
 Note:
