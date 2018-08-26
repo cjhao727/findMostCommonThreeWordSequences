@@ -21,6 +21,7 @@ public class FileService {
 
     private static final String regexOfPunctuationAndSpace = "[\\p{Punct}\\s]+";
     private static final String regexOfSingleWord = "\\w+";
+    private static final String regexOfWhitespace = "\\s+";
     private static final int sizeOfListOfMostCommonThreeWordSequences = 100;
 
     public void setArgs(String[] args) {
@@ -31,8 +32,8 @@ public class FileService {
         System.out.print("Enter Parameter : ");
         Scanner scanner = new Scanner(System.in);
         String t = scanner.nextLine().trim();
-
-        this.args = t.split("\\s+");
+        scanner.close();
+        this.args = t.split(regexOfWhitespace);
     }
 
     public void showFirstHundredMostCommonThreeWordSequences() {
@@ -48,7 +49,7 @@ public class FileService {
 
             List<String> tokenList = getSingleWordTokenList(pathOfFile);
             List<String> threeWordSequence = createThreeWordSequences(tokenList);
-            ConcurrentHashMap<String, LongAdder> threeWordSequencesMap = getThreeWordSequencesMap(threeWordSequence);
+            ConcurrentHashMap<String, LongAdder> threeWordSequencesMap = buildThreeWordSequencesMap(threeWordSequence);
 
             threeWordSequencesMap.keySet().stream()
                     .sorted((previousSequence, nextSequence) -> compare(threeWordSequencesMap.get(nextSequence).intValue(), threeWordSequencesMap.get(previousSequence).intValue()))
@@ -64,7 +65,7 @@ public class FileService {
         }
     }
 
-    private ConcurrentHashMap<String, LongAdder> getThreeWordSequencesMap(List<String> threeWordSequence) {
+    private ConcurrentHashMap<String, LongAdder> buildThreeWordSequencesMap(List<String> threeWordSequence) {
         ConcurrentHashMap<String, LongAdder> threeWordSequenceMap = new ConcurrentHashMap<>();
         threeWordSequence.parallelStream().forEach(token -> {
             if (!threeWordSequenceMap.containsKey(token)) {
